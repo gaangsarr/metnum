@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Integral Riemann Kanan — Kalkulator & Visualisasi</title>
+
+    <!-- Library Math & Chart -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.8.0/math.js"></script>
+
+    <!-- Library MathJax untuk merender rumus LaTeX -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    ></script>
+
+    <!-- Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Panggil file CSS -->
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="page">
+      <header class="hero">
+        <span class="eyebrow">Metode Numerik</span>
+        <h1>Integral Riemann</h1>
+        <p>
+          Menghampiri luas daerah di bawah kurva <code>f(x)</code> dengan
+          menjumlahkan luas persegi panjang, di mana tinggi tiap persegi panjang
+          diambil dari nilai fungsi pada <strong>ujung kanan</strong> setiap
+          partisi. Masukkan fungsi, batas integrasi, dan jumlah partisi di bawah
+          untuk melihat visualisasi grafik, tabel perhitungan, serta galat
+          terhadap nilai integral acuan.
+        </p>
+      </header>
+
+      <!-- 01 INPUT -->
+      <section class="panel">
+        <div class="panel-head">
+          <span class="panel-num">01</span>
+          <span class="panel-title">Masukan</span>
+        </div>
+        <form
+          id="calc-form"
+          onsubmit="
+            event.preventDefault();
+            hitungRiemann();
+          "
+        >
+          <div class="field">
+            <label for="fx">Fungsi f(x)</label>
+            <input id="fx" type="text" value="x^2" autocomplete="off" />
+          </div>
+          <div class="field">
+            <label for="bawah">Batas bawah (a)</label>
+            <input id="bawah" type="number" step="any" value="1" />
+          </div>
+          <div class="field">
+            <label for="atas">Batas atas (b)</label>
+            <input id="atas" type="number" step="any" value="2.2" />
+          </div>
+          <div class="field">
+            <label for="n">Jumlah partisi (n)</label>
+            <input id="n" type="number" step="1" min="1" max="500" value="6" />
+          </div>
+          <button type="submit" id="compute-btn">Hitung</button>
+
+          <div class="hint-row">
+            <strong>Fungsi yang didukung:</strong> Trigonometri
+            (<code>sin(x)</code>, <code>cos(x)</code>, <code>tan(x)</code>),
+            Eksponensial (<code>exp(x)</code>, <code>log(x)</code>), Akar
+            (<code>sqrt(x)</code>, <code>cbrt(x)</code>), Nilai Mutlak
+            (<code>abs(x)</code>), Konstanta (<code>pi</code>, <code>e</code>),
+            dan operasi aritmatika standar (<code>x^2</code>,
+            <code>2*x + 1</code>).
+          </div>
+        </form>
+
+        <details class="info-box" style="margin-top: 15px">
+          <summary>Lihat Rumus & Detail Perhitungan Analitis</summary>
+          <div style="margin-top: 10px; line-height: 1.6">
+            <strong>1. Rumus Riemann Kanan:</strong><br />
+            $$R_n = \sum_{i=1}^{n} f(x_i) \cdot \Delta x \quad \text{dimana}
+            \quad \Delta x = \frac{b - a}{n} \quad \text{dan} \quad x_i = a + i
+            \cdot \Delta x$$
+            <br />
+            <strong>2. Aturan Simpson 1/3 Eksak:</strong><br />
+            Nilai ini dihitung menggunakan integrasi numerik berbasis Aturan
+            Simpson dengan 10.000 partisi mikro untuk menjamin keakuratan nilai
+            aslinya secara universal:<br />
+            $$\int_{a}^{b} f(x) dx \approx \frac{h}{3} \left[ f(x_0) + 4f(x_1) +
+            2f(x_2) + 4f(x_3) + \dots + f(x_m) \right]$$
+            <br />
+            <strong>3. Perhitungan Galat Mutlak:</strong><br />
+            $$\text{Galat} = |R_n - \text{Analitis}|$$
+          </div>
+        </details>
+      </section>
+
+      <!-- 02 VISUALIZATION -->
+      <section class="panel">
+        <div class="panel-head">
+          <span class="panel-num">02</span>
+          <span class="panel-title">Visualisasi</span>
+        </div>
+
+        <div class="chart-container">
+          <canvas id="riemannChart"></canvas>
+        </div>
+
+        <!-- Legend Custom HTML -->
+        <div class="legend-container">
+          <div class="legend">
+            <span
+              ><span class="swatch" style="background: #ae382b"></span> Kurva
+              f(x)</span
+            >
+            <span
+              ><span
+                class="swatch"
+                style="
+                  background: rgba(31, 78, 140, 0.4);
+                  border: 1px solid #1f4e8c;
+                "
+              ></span>
+              Partisi (Persegi Panjang Riemann Kanan)</span
+            >
+          </div>
+        </div>
+      </section>
+
+      <!-- 03 TABLE + RESULTS -->
+      <section class="panel">
+        <div class="panel-head">
+          <span class="panel-num">03</span>
+          <span class="panel-title">Perhitungan Numerik & Galat</span>
+        </div>
+
+        <div class="table-scroll">
+          <table id="riemann-table">
+            <thead>
+              <tr>
+                <th>i</th>
+                <th>x_i (Kanan)</th>
+                <th>f(x_i)</th>
+                <th>Luas Kotak (&Delta;x &times; f(x_i))</th>
+              </tr>
+            </thead>
+            <tbody id="tableBody">
+              <!-- Data dimasukkan via JS -->
+            </tbody>
+          </table>
+        </div>
+
+        <div class="results">
+          <div class="result-row">
+            <div class="result-label">Lebar Kotak (&Delta;x)</div>
+            <div class="result-formula" id="resDelta">—</div>
+          </div>
+          <div class="result-row">
+            <div class="result-label">Metode Numerik (R_n)</div>
+            <div class="result-formula" id="resNumerik">—</div>
+          </div>
+          <div class="result-row">
+            <div class="result-label">Simpson</div>
+            <div class="result-formula" id="resAnalitis">—</div>
+          </div>
+          <div class="result-row error-row">
+            <div class="result-label">Galat Mutlak (&epsilon;)</div>
+            <div class="result-formula" id="resError">—</div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Panggil file JS -->
+    <script src="script.js"></script>
+  </body>
+</html>
