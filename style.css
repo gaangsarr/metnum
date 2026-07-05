@@ -335,3 +335,37 @@ table#riemann-table tbody tr:nth-child(even) {
 .result-row.error-row .result-formula .val {
   color: var(--ink-red);
 }
+
+/* --- FOOTER KELOMPOK --- */
+.site-footer {
+  margin-top: 40px;
+  padding-top: 24px;
+  border-top: 1px dashed var(--grid);
+  text-align: center;
+  font-family: "IBM Plex Mono", monospace;
+}
+.footer-title {
+  font-weight: 600;
+  font-size: 0.85rem;
+  margin-bottom: 16px;
+  color: var(--ink-blue);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.team-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px 20px;
+  font-size: 0.85rem;
+}
+.team-list li {
+  background: var(--ink-blue-tint);
+  padding: 8px 14px;
+  border-radius: 6px;
+  color: var(--ink-navy);
+  border: 1px solid #c7d8ea;
+}

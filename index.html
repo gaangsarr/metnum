@@ -86,22 +86,49 @@
         </form>
 
         <details class="info-box" style="margin-top: 15px">
-          <summary>Lihat Rumus & Detail Perhitungan Analitis</summary>
+          <summary>Lihat Rumus, Detail Perhitungan & Referensi</summary>
           <div style="margin-top: 10px; line-height: 1.6">
             <strong>1. Rumus Riemann Kanan:</strong><br />
             $$R_n = \sum_{i=1}^{n} f(x_i) \cdot \Delta x \quad \text{dimana}
             \quad \Delta x = \frac{b - a}{n} \quad \text{dan} \quad x_i = a + i
             \cdot \Delta x$$
             <br />
-            <strong>2. Aturan Simpson 1/3 Eksak:</strong><br />
-            Nilai ini dihitung menggunakan integrasi numerik berbasis Aturan
-            Simpson dengan 10.000 partisi mikro untuk menjamin keakuratan nilai
-            aslinya secara universal:<br />
+
+            <strong>2. Mengapa Membandingkan dengan Aturan Simpson 1/3?</strong
+            ><br />
+            Nilai pembanding pada kalkulator ini dihitung menggunakan integrasi
+            numerik Aturan Simpson 1/3 dengan 10.000 partisi.
+            <blockquote
+              style="
+                margin: 8px 0 12px 10px;
+                padding-left: 12px;
+                border-left: 4px solid #1f4e8c;
+                font-size: 0.95em;
+                color: #4a5260;
+                background: #f0f4f8;
+                padding-top: 8px;
+                padding-bottom: 8px;
+                border-radius: 0 4px 4px 0;
+              "
+            >
+              Menurut
+              <strong
+                >Chapra, S. C., & Canale, R. P. (2020) dalam
+                <em>Numerical Methods for Engineers (8th ed.)</em></strong
+              >, metode Simpson jauh lebih akurat daripada metode dasar seperti
+              Riemann. Hal ini karena Riemann menghampiri luas kurva menggunakan
+              <strong>bentuk kotak/persegi panjang</strong>, sedangkan Simpson
+              menggunakan pendekatan
+              <strong>garis lengkung (parabola)</strong> yang jauh lebih pas
+              menempel mengikuti bentuk asli kurva. Oleh karena itu, nilai
+              Simpson sangat valid digunakan sebagai acuan "nilai eksak".
+            </blockquote>
             $$\int_{a}^{b} f(x) dx \approx \frac{h}{3} \left[ f(x_0) + 4f(x_1) +
             2f(x_2) + 4f(x_3) + \dots + f(x_m) \right]$$
             <br />
+
             <strong>3. Perhitungan Galat Mutlak:</strong><br />
-            $$\text{Galat} = |R_n - \text{Analitis}|$$
+            $$\text{Galat} = |R_n - \text{Simpson}|$$
           </div>
         </details>
       </section>
@@ -180,6 +207,16 @@
           </div>
         </div>
       </section>
+      <!-- 04 FOOTER KELOMPOK -->
+      <footer class="site-footer">
+        <div class="footer-title">Dibuat oleh Kelompok:</div>
+        <ul class="team-list">
+          <li>Rafael Laurent Wowiling (202431085)</li>
+          <li>Abdul Akyas Sugianto (202431086)</li>
+          <li>Naufal Rizky Jaya Putra (202431092)</li>
+          <li>Gangsar Anjasmoro (202431170)</li>
+        </ul>
+      </footer>
     </div>
 
     <!-- Panggil file JS -->
